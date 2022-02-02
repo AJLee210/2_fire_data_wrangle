@@ -1,7 +1,7 @@
 ---
 title: "Hayman Fire Recovery"
 author: "AJ Lee"
-date: "Feb/3/2022"
+date: "Feb/2/2022"
 output: html_document
 
 
@@ -16,7 +16,7 @@ library(lubridate)
 # Now that we have learned how to munge (manipulate) data
 # and plot it, we will work on using these skills in new ways
 
-knitr::opts_knit$set(root.dir='../src')
+knitr::opts_knit$set(root.dir='../docs')
 
 ```
 
