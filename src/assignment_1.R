@@ -13,16 +13,15 @@ files <- list.files('data',full.names=T)
 
 
 #Read in individual data files
-ndmi <- read_csv(files[1]) %>% 
+ndmi <- read.csv(files[1]) %>% 
   rename(burned=2,unburned=3) %>%
   mutate(data='ndmi')
 
-
-ndsi <- read_csv(files[2]) %>% 
+ndsi <- read.csv(files[2]) %>% 
   rename(burned=2,unburned=3) %>%
   mutate(data='ndsi')
 
-ndvi <- read_csv(files[3])%>% 
+ndvi <- read.csv(files[3])%>% 
   rename(burned=2,unburned=3) %>%
   mutate(data='ndvi')
 
@@ -61,8 +60,19 @@ ggplot(summer_only,aes(x=ndmi,y=ndvi,color=site)) +
 #In other words, does the previous year's snow cover influence vegetation
 # growth for the following summer? 
 
-
 ## Your code here
+NDSI_NDVI <- mutate(full_long, month=month(DateTime), 
+                    year=year(DateTime)) %>%
+            filter((data=='ndsi' & month %in% c(1:4))|(data=='ndvi' & month %in% c(6,7,8))) %>% 
+            group_by(data,site,year) %>% 
+            summarize(mean_value=mean(value)) %>% 
+            spread(key='data', value='mean_value')
+
+ggplot(NDSI_NDVI, aes(x=ndsi, y=ndvi, color=year)) +
+  geom_point() +
+  theme_few() +
+  theme(legend.position=c(0.8,0.2)) +
+  facet_wrap(~site)
 
 ## End code for question 2 -----------------
 
@@ -78,6 +88,22 @@ ggplot(summer_only,aes(x=ndmi,y=ndvi,color=site)) +
 ###### Question 4 #####
 #What month is the greenest month on average? Does this change in the burned
 # plots after the fire? 
+
+Green_ndvi <- gather(ndvi, key='site',value='NDVI',-DateTime,-data) %>%
+              filter(!is.na(NDVI)) %>% 
+              mutate(month = month(DateTime)) %>%
+              group_by(site, month) %>% 
+              summarize(mean_NDVI=mean(NDVI))
+
+ggplot(Green_ndvi, aes(x=month, y=mean_NDVI, color=site)) +
+  geom_point() +
+  geom_line(linetype=2) +
+  theme_few() +
+  scale_color_few() +
+  theme(legend.position=c(0.5,0.2))
+
+
+
 
 ##### Question 5 ####
 #What month is the snowiest on average?
