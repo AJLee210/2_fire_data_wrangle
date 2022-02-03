@@ -16,7 +16,7 @@ library(lubridate)
 # Now that we have learned how to munge (manipulate) data
 # and plot it, we will work on using these skills in new ways
 
-knitr::opts_knit$set(root.dir='../docs')
+knitr::opts_knit$set(root.dir='.')
 
 ```
 
